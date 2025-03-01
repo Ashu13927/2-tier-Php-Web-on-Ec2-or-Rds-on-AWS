@@ -1,0 +1,73 @@
+1st solution 
+
+<?php
+define('DB_SERVER', 'login2db.cp0ammeg4b6m.eu-north-1.rds.amazonaws.com');
+define('DB_USERNAME', 'admin');
+define('DB_PASSWORD', '139271139271');
+define('DB_DATABASE', 'php');
+?>
+
+
+
+2nd solution
+
+
+<?php
+// Database configuration
+define('DB_SERVER', 'login2db.cp0ammeg4b6m.eu-north-1.rds.amazonaws.com');
+define('DB_USERNAME', 'admin');
+define('DB_PASSWORD', '139271139271');
+define('DB_DATABASE', 'php');
+
+// Establish a database connection
+$connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+
+// Check connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+} else {
+    echo "Connected successfully!<br>";
+}
+
+// Create EMPLOYEES table if it doesn't exist
+$query = "CREATE TABLE IF NOT EXISTS EMPLOYEES (
+    ID int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    NAME VARCHAR(45),
+    ADDRESS VARCHAR(90)
+)";
+
+if (mysqli_query($connection, $query)) {
+    echo "Table EMPLOYEES is ready!<br>";
+} else {
+    echo "Error creating table: " . mysqli_error($connection) . "<br>";
+}
+
+// Insert a sample employee record
+$name = "John Doe";
+$address = "123 Main St";
+$query = "INSERT INTO EMPLOYEES (NAME, ADDRESS) VALUES ('$name', '$address')";
+
+if (mysqli_query($connection, $query)) {
+    echo "Employee added successfully!<br>";
+} else {
+    echo "Error adding employee: " . mysqli_error($connection) . "<br>";
+}
+
+// Fetch and display all records from EMPLOYEES table
+echo "<h1>Employee Records</h1>";
+$result = mysqli_query($connection, "SELECT * FROM EMPLOYEES");
+
+echo "<table border='1' cellpadding='5' cellspacing='0'>";
+echo "<tr><th>ID</th><th>NAME</th><th>ADDRESS</th></tr>";
+while ($row = mysqli_fetch_assoc($result)) {
+    echo "<tr>";
+    echo "<td>" . $row['ID'] . "</td>";
+    echo "<td>" . $row['NAME'] . "</td>";
+    echo "<td>" . $row['ADDRESS'] . "</td>";
+    echo "</tr>";
+}
+echo "</table>";
+
+// Close the connection
+mysqli_close($connection);
+?>
